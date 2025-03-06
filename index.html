@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <title>Yuri - Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <h1>Aspas</h1>
+    <img src="icon.gif" alt="Foto de perfil" class="profile-image">
+    <div class="tech-icons">
+        <i class="fab fa-html5" title="HTML5"></i>
+        <i class="fab fa-python" title="Python"></i>
+        <i class="fab fa-github" title="GitHub"></i>
+        <i class="fas fa-code" title="C#"></i>
+        <i class="fas fa-code-branch" title="C++"></i>
+        <i class="fas fa-terminal" title="Bash"></i>
+    </div>
+    <h2><span class="typewriter"></span><span class="cursor">|</span></h2>
+    <a href="https://discord.gg/cloud" target="_blank" class="discord-link">
+        <div class="discord-section">
+            <img src="discord.gif" alt="Discord Server" class="discord-icon">
+            <h3>Entre no meu servidor do Discord!</h3>
+        </div>
+    </a>
+
+    <a href="https://github.com/Yurizadas2323" target="_blank" class="github-link">
+        <div class="github-section">
+            <i class="fab fa-github github-icon"></i>
+            <h3>Visite meu perfil no GitHub!</h3>
+        </div>
+    </a>
+
+    <div class="music-player">
+        <div class="music-banner">
+            <img src="banner1.jpg" alt="Banner da música" class="banner-image">
+        </div>
+        <div class="music-info">
+            <h3 class="music-title">Automotivo Solitude</h3>
+            <p class="music-artist">Artista</p>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+        <div class="controls">
+            <button class="control-btn" id="prevBtn">
+                <i class="fas fa-backward"></i>
+            </button>
+            <button class="control-btn" id="playBtn">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="control-btn" id="nextBtn">
+                <i class="fas fa-forward"></i>
+            </button>
+        </div>
+        <div class="volume-container">
+            <i class="fas fa-volume-up"></i>
+            <input type="range" class="volume-slider" min="0" max="100" value="100">
+        </div>
+        <audio id="audio-player"></audio>
+    </div>
+
+    <script>
+        const text = "✨ Olá! 😃 Se você está aqui, significa que acessou meu perfil. 🚀 Eu criei este portfólio com muito cuidado e dedicação, espero que goste! 💻💡 Beijo! ❤️";
+        const typewriter = document.querySelector('.typewriter');
+        let i = 0;
+        let isDeleting = false;
+        let currentText = '';
+        let speed = 50;
+
+        function type() {
+            if (isDeleting) {
+                currentText = text.substring(0, currentText.length - 1);
+                typewriter.textContent = currentText;
+                if (currentText === '') {
+                    isDeleting = false;
+                    i = 0;
+                }
+            } else {
+                currentText = text.substring(0, currentText.length + 1);
+                typewriter.textContent = currentText;
+                if (currentText === text) {
+                    setTimeout(() => {
+                        isDeleting = true;
+                    }, 2000);
+                }
+            }
+            setTimeout(type, speed);
+        }
+
+        window.onload = type;
+
+        // Music Player Controls
+        const audioPlayer = document.getElementById('audio-player');
+        const playBtn = document.getElementById('playBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressBar = document.querySelector('.progress');
+        const progressContainer = document.querySelector('.progress-container');
+        const volumeSlider = document.querySelector('.volume-slider');
+        const musicTitle = document.querySelector('.music-title');
+        const musicArtist = document.querySelector('.music-artist');
+        const bannerImage = document.querySelector('.banner-image');
+
+        // Playlist
+        const playlist = [
+            {
+                title: "Automotivo Solitude",
+                artist: "Mc Morena",
+                src: "musica1.mp3",
+                banner: "banner1.gif"
+            },
+            {
+                title: "Fantasma Feat. Akashi",
+                artist: "Ana Laura Lopes Ft. Akashi Cruz",
+                src: "musica2.mp3",
+                banner: "banner2.gif"
+            },
+            {
+                title: "FANTASMA - Versão GORDÃO DO PC",
+                artist: "Gordão do pc",
+                src: "musica3.mp3",
+                banner: "banner3.gif"
+            }
+            {
+                title: "AUTOMOTIVO MEC",
+                artist: "UNKNOW",
+                src: "musica4.mp3",
+                banner: "banner4.gif"
+            }
+        ];
+
+        let currentSongIndex = 0;
+
+        // Função para carregar música
+        function loadSong(index) {
+            const song = playlist[index];
+            audioPlayer.src = song.src;
+            musicTitle.textContent = song.title;
+            musicArtist.textContent = song.artist;
+            bannerImage.src = song.banner;
+            audioPlayer.play();
+            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        }
+
+        // Play/Pause
+        playBtn.addEventListener('click', () => {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                audioPlayer.pause();
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        });
+
+        // Next Song
+        nextBtn.addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            loadSong(currentSongIndex);
+        });
+
+        // Previous Song
+        prevBtn.addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+            loadSong(currentSongIndex);
+        });
+
+        // Progress Bar
+        audioPlayer.addEventListener('timeupdate', () => {
+            const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            progressBar.style.width = `${progress}%`;
+        });
+
+        progressContainer.addEventListener('click', (e) => {
+            const progressTime = (e.offsetX / progressContainer.offsetWidth) * audioPlayer.duration;
+            audioPlayer.currentTime = progressTime;
+        });
+
+        // Volume Control
+        volumeSlider.addEventListener('input', (e) => {
+            audioPlayer.volume = e.target.value / 100;
+        });
+
+        // Auto play next song
+        audioPlayer.addEventListener('ended', () => {
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            loadSong(currentSongIndex);
+        });
+
+        // Load first song and start playing
+        loadSong(currentSongIndex);
+    </script>
+</body>
+</html>
